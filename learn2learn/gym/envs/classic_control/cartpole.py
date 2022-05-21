@@ -297,5 +297,4 @@ class MetaCartPoleEnv(gym.Env):#[np.ndarray, Union[int, np.ndarray]]):
         self._task=task
         self._length=self._task['length']
         self._force_mag=self._task['force']
-        #self._masscart = self._task['mass']
         self.reset()

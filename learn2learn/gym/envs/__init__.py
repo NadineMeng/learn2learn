@@ -44,14 +44,8 @@ register(
 )
 
 register(
-    'HalfCheetahRandVel-v1',
-    entry_point='learn2learn.gym.envs.mujoco.halfcheetah_velocity:HalfCheetahRandVelEnv',
-    max_episode_steps=100,
-)
-
-register(
-    'HalfCheetahRandGra-v1',
-    entry_point='learn2learn.gym.envs.mujoco.halfcheetah_gravity:HalfCheetahGraEnv',
+    'HalfCheetahGra-v1',
+    entry_point='learn2learn.gym.envs.mujoco.halfcheetah_gra:HalfCheetahGraEnv',
     max_episode_steps=100,
 )
 
