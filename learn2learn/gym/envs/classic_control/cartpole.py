@@ -61,13 +61,9 @@ class MetaCartPoleEnv(gym.Env):#[np.ndarray, Union[int, np.ndarray]]):
         self.masspole = 0.1
         self.masscart = 1.0
         self.total_mass = self.masspole + self.masscart
-        #self.length = 0.5  # actually half the pole's length
-        #self.polemass_length = self.masspole * self.length
-        #self.force_mag = 10.0
 
         self._task=task
         self.tasks=self.sample_tasks(n_tasks)
-        #self._masscart = self.tasks[0]['mass']
         self._length=self.tasks[0]['length']
         self._force_mag=self.tasks[0]['force']
 
@@ -117,7 +113,6 @@ class MetaCartPoleEnv(gym.Env):#[np.ndarray, Union[int, np.ndarray]]):
         sintheta = math.sin(theta)
 
         self.polemass_length = self.masspole * self._length
-        #self.total_mass = self.masspole + self._masscart
         
 
         # For the interested reader:
