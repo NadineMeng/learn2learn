@@ -9,10 +9,9 @@ try:
 except DependencyNotInstalled:
     from learn2learn.gym.envs.mujoco.dummy_mujoco_env import MujocoEnv
 
-from learn2learn.gym.envs.meta_env import MetaEnv
 
 
-class HalfCheetahGraEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
+class HalfCheetahGraEnv(MujocoEnv, gym.utils.EzPickle):
     """
     [[Source]](https://github.com/learnables/learn2learn/blob/master/learn2learn/gym/envs/mujoco/halfcheetah_forward_backward.py)
 
@@ -38,14 +37,15 @@ class HalfCheetahGraEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
     """
 
     def __init__(self, task=None):
-        MetaEnv.__init__(self, task)
         MujocoEnv.__init__(self, 'half_cheetah.xml', 5)
         gym.utils.EzPickle.__init__(self)
+        
 
     # -------- MetaEnv Methods --------
     def set_task(self, task):
-        MetaEnv.set_task(self, task)
         self.gravity=task['gravity_scale']*(-9.81)
+        self.model.opt.gravity[-1]=self.gravity
+        
         
     def sample_tasks(self, num_tasks):
         gravity_scales=np.random.uniform(0.95,1.05,size=(num_tasks, ))
@@ -76,20 +76,18 @@ class HalfCheetahGraEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
 
     # -------- Gym Methods --------
     def step(self, action):
-        self.model.opt.gravity[-1]=self.gravity
         xposbefore = self.sim.data.qpos[0]
         self.do_simulation(action, self.frame_skip)
         xposafter = self.sim.data.qpos[0]
-
         forward_vel = (xposafter - xposbefore) / self.dt
-        forward_reward = forward_vel
+        forward_reward =forward_vel
         ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
 
         observation = self._get_obs()
         reward = forward_reward - ctrl_cost
         done = False
         infos = dict(reward_forward=forward_reward,
-                     reward_ctrl=-ctrl_cost, task=self._task)
+                     reward_ctrl=-ctrl_cost)#, task=self._task)
         return (observation, reward, done, infos)
 
     def reset(self, *args, **kwargs):
