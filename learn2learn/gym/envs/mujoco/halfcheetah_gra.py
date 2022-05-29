@@ -47,6 +47,8 @@ class HalfCheetahGraEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
         MetaEnv.set_task(self, task)
         self.gravity=task['gravity_scale']*(-9.81)
         
+        
+        
     def sample_tasks(self, num_tasks):
         gravity_scales=np.random.uniform(0.95,1.05,size=(num_tasks, ))
         tasks = [{'gravity_scale': gravity_scale} for gravity_scale in gravity_scales]
@@ -76,7 +78,6 @@ class HalfCheetahGraEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
 
     # -------- Gym Methods --------
     def step(self, action):
-        self.model.opt.gravity[-1]=self.gravity
         xposbefore = self.sim.data.qpos[0]
         self.do_simulation(action, self.frame_skip)
         xposafter = self.sim.data.qpos[0]
